@@ -1,0 +1,89 @@
+# This file defines what the bot is allowed to do and when.
+# If a decision is not here, the bot must not improvise.
+
+# 1. Dataset Acceptance Rules 
+dataset_validation:
+  min_rows: 50
+  min_columns: 3
+  max_missing_overall_pct: 40
+  required_column_types:
+    numeric: 1
+
+
+# 2. Column-Level Cleaning Decisions
+column_cleaning:
+  drop_column_if_missing_pct_gt: 30
+  drop_constant_columns: true
+  drop_id_like_columns: true
+  id_patterns:
+    - id
+    - uuid
+    - index
+
+
+# 3. Missing Value Strategy
+missing_values:
+  numeric:
+    if_missing_pct_lt: 10
+    strategy: median
+  categorical:
+    if_missing_pct_lt: 10
+    strategy: mode
+  otherwise:
+    action: flag_only
+
+
+# 4. Outlier Handling 
+outliers:
+  method: iqr
+  action: flag
+  removal_allowed: false
+
+
+# 5. EDA Decision Rule
+eda:
+  correlation_threshold: 0.1
+  generate_plots:
+    numeric_vs_numeric: true
+    categorical_vs_numeric: true
+  skip_eda_if_rows_lt: 100
+
+
+# 6. Modeling Eligibility Rules
+modeling:
+  allow_if:
+    min_rows: 500
+    target_column_exists: true
+    target_type: numeric
+    min_target_variance: 0.01
+  otherwise:
+    action: skip_modeling
+
+
+# 7. Model Constraints
+model_constraints:
+  allowed_models:
+    - linear_regression
+    - random_forest
+  max_features: 15
+  evaluation_metric: rmse
+
+
+# 8. Risk FLagging Rules
+risk_flags:
+  data_quality:
+    high_missing_pct: 25
+    high_outlier_pct: 5
+  modeling_risks:
+    overfitting_if_train_rmse_gap_gt: 20
+    small_sample_warning_if_rows_lt: 800
+  business_risks:
+    extreme_values_pct_gt: 2
+
+
+# 9. Output Enforcement
+outputs:
+  generate_pdf_report: true
+  include_decision_log: true
+  include_risk_summary: true
+  export_cleaned_data: true
