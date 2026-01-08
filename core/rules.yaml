@@ -13,12 +13,14 @@ dataset_validation:
 # 2. Column-Level Cleaning Decisions
 column_cleaning:
   drop_column_if_missing_pct_gt: 30
-  drop_constant_columns: true
-  drop_id_like_columns: true
+  drop_constant_columns: True
+  drop_id_like_columns: True
   id_patterns:
     - id
     - uuid
     - index
+    - s.no
+    - s.no.
 
 
 # 3. Missing Value Strategy
@@ -44,8 +46,8 @@ outliers:
 eda:
   correlation_threshold: 0.1
   generate_plots:
-    numeric_vs_numeric: true
-    categorical_vs_numeric: true
+    numeric_vs_numeric: True
+    categorical_vs_numeric: True
   skip_eda_if_rows_lt: 100
 
 
@@ -53,8 +55,6 @@ eda:
 modeling:
   allow_if:
     min_rows: 500
-    target_column_exists: true
-    target_type: numeric
     min_target_variance: 0.01
   otherwise:
     action: skip_modeling
@@ -65,6 +65,7 @@ model_constraints:
   allowed_models:
     - linear_regression
     - random_forest
+  default_model: linear_regression
   max_features: 15
   evaluation_metric: rmse
 
@@ -83,7 +84,7 @@ risk_flags:
 
 # 9. Output Enforcement
 outputs:
-  generate_pdf_report: true
-  include_decision_log: true
-  include_risk_summary: true
-  export_cleaned_data: true
+  generate_pdf_report: True
+  include_decision_log: True
+  include_risk_summary: True
+  export_cleaned_data: True
