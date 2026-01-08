@@ -1,1 +1,6 @@
 venv
+data
+output
+tests
+__pycache__
+*.pdf
