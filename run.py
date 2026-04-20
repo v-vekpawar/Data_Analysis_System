@@ -39,7 +39,7 @@ def run_pipeline(dataset_path: str, rules_path: str):
             "data_quality_risks": validation_result["reasons"],
             "analysis_risks": [],
             "modeling_risks": [],
-            "buisness_risks": []
+            "business_risks": []
         }
 
         report_path = generate_report(
